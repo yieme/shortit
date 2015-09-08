@@ -82,7 +82,7 @@ function sendJson(res, obj) {
 function notFound(res, short) {
 	bump('_404');
 	log.warning(short + ' Not Found');
-	if (shorts._404) return doShort('_404');
+	if (shorts._404) return doShort('_404', res);
 	res.send(template.replace('$msg',  'Not Found'));
 	res.status(404);
 }
@@ -108,7 +108,7 @@ app.get('/_about', function (req, res) {
 
 app.get('/', function (req, res) {
 	bump('/');
-	if (shorts['']) return doShort('');
+	if (shorts['']) return doShort('', res);
 	var msg = process.env.NAME || pak.name;
   res.send(template.replace('$msg',  msg));
 	log.info('/');
