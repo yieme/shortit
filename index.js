@@ -98,7 +98,7 @@ app.get('/_about', function (req, res) {
 
 app.get('/', function (req, res) {
 	bump('/');
-	if (short['']) return doShort('');
+	if (shorts['']) return doShort('');
 	var msg = process.env.NAME || pak.name;
   res.send(template.replace('$msg',  msg));
 	log.info('/');
