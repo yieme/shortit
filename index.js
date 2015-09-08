@@ -71,11 +71,19 @@ function getShorts() {
 	}
 }
 
-function notFound(req, res) {
+function sendJson(res, obj) {
+	res.type('json');
+	obj = obj || {};
+	var json = JSON.stringify(obj, null, 2);
+	res.send(json);
+}
+
+function notFound(res, short) {
 	bump('_404');
-	log.info('Not Found');
-	if (shorts['_404']) return doShort('_404');
-	res.status(404).send(template.replace('$msg',  'Not Found'));
+	log.warn(short + ' Not Found');
+	if (shorts._404) return doShort('_404');
+	res.send(template.replace('$msg',  'Not Found'));
+	res.status(404);
 }
 
 function doShort(short, res) {
@@ -86,7 +94,7 @@ function doShort(short, res) {
 		log.info(short + ': ' + url);
 		bump(short);
 	} else {
-		notFound(res);
+		notFound(res, short);
 	}
 }
 
@@ -114,18 +122,18 @@ app.get('/_reload', function (req, res) {
 
 app.get('/_stats', function (req, res) {
 	bump('_stats');
-	res.json(stats);
+	sendJson(res, stats);
 	log.info('/_stats');
 });
 
 app.get('/_stats/:short', function (req, res) {
 	bump('_stats');
-	res.json(stats[req.params.short]);
+	sendJson(res, stats[req.params.short]);
 	log.info('/_stats/' + req.params.short);
 });
 
 app.get('/:short', function (req, res) {
-	doShort(req.params.short);
+	doShort(req.params.short, res);
 });
 
 var server = app.listen(app.get('port'), function () {
