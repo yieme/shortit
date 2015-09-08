@@ -1,6 +1,6 @@
 {
   "name": "shortit",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "A quick ShortURL server with data via external JSON database. Includes Stats and LogEntries logging",
   "main": "index.js",
   "scripts": {
