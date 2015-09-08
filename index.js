@@ -20,7 +20,8 @@ var logentriesConfig = {
 	'console':  1
 };
 var log           = ((process.env.LOGENTRIES)) ? new Logger(logentriesConfig) : console;
-log.error         = log.error || log.err;
+log.error         = log.error   || log.err;
+log.warning       = log.warning || log.warn;
 
 function bump(area) {
 	var now   = new Date();
@@ -80,7 +81,7 @@ function sendJson(res, obj) {
 
 function notFound(res, short) {
 	bump('_404');
-	log.warn(short + ' Not Found');
+	log.warning(short + ' Not Found');
 	if (shorts._404) return doShort('_404');
 	res.send(template.replace('$msg',  'Not Found'));
 	res.status(404);
@@ -141,10 +142,10 @@ var server = app.listen(app.get('port'), function () {
   var port = server.address().port;
   log.info(pak.name + ' ' + pak.version + ' listening on: ' + host + ' port: ' + port + ' at: ' + new Date().toString());
 	if (!process.env.LOGENTRIES) {
-		log.warn('LOGENTRIES not defined');
+		log.warning('LOGENTRIES not defined');
 	}
 	if (!process.env.NAME) {
-		log.warn('NAME not defined');
+		log.warning('NAME not defined');
 	}
 });
 
