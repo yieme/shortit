@@ -20,6 +20,7 @@ var logentriesConfig = {
 	'console':  1
 };
 var log           = ((process.env.LOGENTRIES)) ? new Logger(logentriesConfig) : console;
+log.error         = log.error || log.err;
 
 function bump(area) {
 	var now   = new Date();
