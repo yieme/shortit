@@ -86,7 +86,7 @@ app.get('/', function (req, res) {
 
 app.get('/_reload', function (req, res) {
 	bump('_reload');
-	res.status(404).send(template.replace('$msg',  'Not Found'));
+	res.send(template.replace('$msg',  'OK'));
 	getShorts();
 	log.info('/_reload');
 });
