@@ -4,7 +4,7 @@ var pak     = require('./package.json');
 var Client  = require('node-rest-client').Client;
 var client  = new Client();
 var shorts  = require('./shorts.json');
-var shortsDataUrl = process.env.SHORTS_DATA_URL;
+var shortsDataUrl = process.env.DATA_URL;
 app.set('port', (process.env.PORT || 5000));
 var template      = '<br><br><center><h1 style="font-family:arial">$msg';
 var lastUpdate    = 0;
@@ -66,7 +66,7 @@ function getShorts() {
 				shorts     = parsed;
 			});
 		} else {
-			log.error('SHORTS_URL not defined');
+			log.error('DATA_URL not defined');
 		}
 	}
 }
@@ -77,10 +77,30 @@ function notFound(req, res) {
 	log.info('Not Found');
 }
 
-app.get('/', function (req, res) {
-	bump('_home');
+function doShort(short, res) {
+	var url   = shorts[short];
+	if (url) {
+		url = url.url || url; // support firebase short: { id: short, url: url } formatted data
+		res.redirect(302, url);
+		log.info(short + ': ' + url);
+		bump(short);
+	} else {
+		notFound(res);
+	}
+}
+
+app.get('/_about', function (req, res) {
+	bump('_about');
 	var msg = pak.version + ' ' + duration(+new Date() - started) + '-' + duration(+new Date() - lastUpdate);
   res.send(template.replace('$msg',  pak.name + '</h1><sup style="color:gray">' + msg));
+	log.info('/_about');
+});
+
+app.get('/', function (req, res) {
+	bump('/');
+	if (short['']) return doShort('');
+	var msg = process.env.NAME || pak.name;
+  res.send(template.replace('$msg',  msg));
 	log.info('/');
 });
 
@@ -104,16 +124,7 @@ app.get('/_stats/:short', function (req, res) {
 });
 
 app.get('/:short', function (req, res) {
-	var short = req.params.short;
-	var url   = shorts[short];
-	if (url) {
-		url = url.url || url; // support firebase short: { id: short, url: url } formatted data
-		res.redirect(302, url);
-		log.info(short + ': ' + url);
-		bump(short);
-	} else {
-		notFound(res);
-	}
+	doShort(req.params.short);
 });
 
 var server = app.listen(app.get('port'), function () {
@@ -122,6 +133,9 @@ var server = app.listen(app.get('port'), function () {
   log.info(pak.name + ' ' + pak.version + ' listening on: ' + host + ' port: ' + port + ' at: ' + new Date().toString());
 	if (!process.env.LOGENTRIES) {
 		log.warn('LOGENTRIES not defined');
+	}
+	if (!process.env.NAME) {
+		log.warn('NAME not defined');
 	}
 });
 
