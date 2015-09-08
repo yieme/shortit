@@ -72,9 +72,10 @@ function getShorts() {
 }
 
 function notFound(req, res) {
-	res.status(404).send(template.replace('$msg',  'Not Found'));
 	bump('_404');
 	log.info('Not Found');
+	if (shorts['_404']) return doShort('_404');
+	res.status(404).send(template.replace('$msg',  'Not Found'));
 }
 
 function doShort(short, res) {
