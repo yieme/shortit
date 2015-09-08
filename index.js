@@ -81,7 +81,7 @@ function sendJson(res, obj) {
 
 function notFound(res, short) {
 	bump('_404');
-	log.warning(short + ' Not Found');
+	log.warning('/' + short + ' Not Found');
 	if (shorts._404) return doShort('_404', res);
 	res.send(template.replace('$msg',  'Not Found'));
 	res.status(404);
@@ -124,7 +124,7 @@ app.get('/_reload', function (req, res) {
 app.get('/_stats', function (req, res) {
 	bump('_stats');
 	sendJson(res, stats);
-	log.info('/_stats');
+	log.info('/_stats ' + JSON.stringify(stats));
 });
 
 app.get('/_stats/:short', function (req, res) {
