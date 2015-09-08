@@ -4,7 +4,8 @@ A quick ShortURL server with data via external JSON database. Includes Stats and
 Use local `shorts.json` data or remote JSON data for shorts. Use firebase to manage your data.
 
 Environment variables:
-- `SHORTS_DATA_URL` ex: `https://shortit.firebaseio.com/shorts.json`
+- `NAME` ex: `mybit.ly`
+- `DATA_URL` ex: `https://shortit.firebaseio.com/shorts.json`
 - `PORT` default: `5000` for heroku
 - `RELOAD` reload data frequency, default daily
 - `LOGENTRIES` logentries key
