@@ -3,8 +3,8 @@ var app     = express();
 var pak     = require('./package.json');
 var Client  = require('node-rest-client').Client;
 var client  = new Client();
-var shorts  = {};
-var shortsDataUrl = process.env.SHORTS_URL;
+var shorts  = require('./shorts.json');
+var shortsDataUrl = process.env.SHORTS_DATA_URL;
 app.set('port', (process.env.PORT || 5000));
 var template      = '<br><br><center><h1 style="font-family:arial">$msg';
 var lastUpdate    = 0;
@@ -103,9 +103,10 @@ app.get('/_stats/:short', function (req, res) {
 app.get('/:short', function (req, res) {
 	var short = req.params.short;
 	var url   = shorts[short];
-	if (url && url.url) {
-		res.redirect(302, url.url);
-		log.info(short + ': ' + url.url);
+	if (url) {
+		url = url.url || url; // support firebase short: { id: short, url: url } formatted data
+		res.redirect(302, url);
+		log.info(short + ': ' + url);
 		bump(short);
 	} else {
 		notFound(res);
