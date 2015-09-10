@@ -8,8 +8,8 @@ var shortIt = {
 	company:    process.env.COMPANY     || process.env.NAME || pak.name,
 	domain:     process.env.DOMAIN      || process.env.NAME || pak.name,
 	url:        process.env.URL         || 'https://github.com/yieme/shortit',
-	privacy:    process.env.PRIVACY_URL || (process.env.DOMAIN) ? process.env.DOMAIN + '/privacy' : '',
-	tos:        process.env.TOS_URL     || (process.env.DOMAIN) ? process.env.DOMAIN + '/tos'     : '',
+	privacyUrl: process.env.PRIVACY_URL || (process.env.URL) ? process.env.URL + '/privacy' : '',
+	tosUrl:     process.env.TOS_URL     || (process.env.URL) ? process.env.URL + '/tos'     : '',
 	year:       process.env.YEAR        || (year > 2015) ? '2015-' + year : year,
 	logoUrl:    process.env.LOGO_URL    || 'logo.png',
 	faviconUrl: process.env.FAVICON_URL || 'favicon.png'
