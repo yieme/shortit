@@ -3,10 +3,18 @@ var app     = express();
 var pak     = require('./package.json');
 var Client  = require('node-rest-client').Client;
 var client  = new Client();
+var shortIt = {
+	company: process.env.COMPANY || process.env.NAME || pak.name,
+	domain:  process.env.DOMAIN  || process.env.NAME || pak.name,
+	url:     process.env.URL     || 'https://github.com/yieme/shortit'
+};
 var shorts  = require('./shorts.json');
+var fs      = require('fs');
 var shortsDataUrl = process.env.DATA_URL;
 app.set('port', (process.env.PORT || 5000));
 var template      = '<br><br><center><h1 style="font-family:arial">$msg';
+var home          = '$company uses the $domain domain as part of a service to protect users from harmful activity, to provide value for the developer ecosystem, and as a quality signal for surfacing interesting events.';
+var msg404        = 'Sorry, page not found';
 var lastUpdate    = 0;
 var started       = +new Date();
 var refreshWait   = 5000; // 5 seconds between refresh requests
@@ -22,6 +30,8 @@ var logentriesConfig = {
 var log           = ((process.env.LOGENTRIES)) ? new Logger(logentriesConfig) : console;
 log.error         = log.error   || log.err;
 log.warning       = log.warning || log.warn;
+var favicon_png   = '';
+var logo_png      = '';
 
 function bump(area) {
 	var now   = new Date();
@@ -83,7 +93,7 @@ function notFound(res, short) {
 	bump('_404');
 	log.warning('/' + short + ' Not Found');
 	if (shorts._404) return doShort('_404', res);
-	res.send(template.replace('$msg',  'Not Found'));
+	render(res, '_404', msg404.replace('$short', short));
 	res.status(404);
 }
 
@@ -99,36 +109,55 @@ function doShort(short, res) {
 	}
 }
 
+function render(res, name, $msg) {
+	var result = template.replace('$msg', $msg);
+	for(var max=10; max>0&& result.indexOf('$') >= 0; max--) {
+		result = result.replace('$company', shortIt.company).replace('$url', shortIt.url).replace('$domain', shortIt.domain);
+	}
+	res.send(result);
+	bump(name);
+	log.info('/' + name);
+}
+
+function renderPng(res, name, img) {
+	res.type('png');
+	res.send(img);
+	name = name + '.png';
+	bump(name);
+	log.info('/' + name);
+}
+
+app.get('/favicon.png', function (req, res) {
+	renderPng(res, 'favicon', favicon);
+});
+
+app.get('/logo.png', function (req, res) {
+	renderPng(res, 'logo', logo);
+});
+
 app.get('/_about', function (req, res) {
-	bump('_about');
 	var msg = pak.version + ' ' + duration(+new Date() - started) + '-' + duration(+new Date() - lastUpdate);
-  res.send(template.replace('$msg',  pak.name + '</h1><sup style="color:gray">' + msg));
-	log.info('/_about');
+	render(res, '_about', pak.name + '</h1><sup style="color:gray">' + msg);
 });
 
 app.get('/', function (req, res) {
-	bump('/');
-	if (shorts['']) return doShort('', res);
-	var msg = process.env.NAME || pak.name;
-  res.send(template.replace('$msg',  msg));
-	log.info('/');
+	if (shorts._home) return doShort('_home', res);
+	render(res, '', home);
 });
 
 app.get('/_reload', function (req, res) {
-	bump('_reload');
-	res.send(template.replace('$msg',  'OK'));
+	render(res, '_reload', 'Reload done.');
 	getShorts();
-	log.info('/_reload');
 });
 
 app.get('/_stats', function (req, res) {
-	bump('_stats');
+	bump('/_stats');
 	sendJson(res, stats);
 	log.info('/_stats ' + JSON.stringify(stats));
 });
 
 app.get('/_stats/:short', function (req, res) {
-	bump('_stats');
+	bump('/_stats/*');
 	sendJson(res, stats[req.params.short]);
 	log.info('/_stats/' + req.params.short);
 });
@@ -144,9 +173,53 @@ var server = app.listen(app.get('port'), function () {
 	if (!process.env.LOGENTRIES) {
 		log.warning('LOGENTRIES not defined');
 	}
-	if (!process.env.NAME) {
-		log.warning('NAME not defined');
+	if (!process.env.COMPANY) {
+		log.warning('COMPANY not defined');
 	}
+	if (!process.env.DOMAIN) {
+		log.warning('DOMAIN not defined');
+	}
+	if (!process.env.URL) {
+		log.warning('URL not defined');
+	}
+});
+
+function loadFile(path, cb) {
+	fs.readFile('./' + path, 'utf8', function (err, data) {
+	  if (data && !err) {
+			log.info('Loaded ' + path);
+		} else {
+			log.warning('Unable to load template.html');
+		}
+		cb(data);
+	});
+}
+
+function loadPng(path, cb) {
+	fs.readFile('./' + path, function (err, data) {
+	  if (data && !err) {
+			log.info('Loaded ' + path);
+		} else {
+			log.warning('Unable to load template.html');
+		}
+		cb(data);
+	});
+}
+
+loadFile('template.html', function(data) {
+	template = data || '';
+});
+loadFile('home.html', function(data) {
+	home = data || '';
+});
+loadFile('404.html', function(data) {
+	msg404 = data || '';
+});
+loadPng('favicon.png', function(data) {
+	favicon = data || null;
+});
+loadPng('logo.png', function(data) {
+	logo = data || null;
 });
 
 getShorts();
