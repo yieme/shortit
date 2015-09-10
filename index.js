@@ -8,8 +8,10 @@ var shortIt = {
 	company:    process.env.COMPANY     || process.env.NAME || pak.name,
 	domain:     process.env.DOMAIN      || process.env.NAME || pak.name,
 	url:        process.env.URL         || 'https://github.com/yieme/shortit',
+	privacy:    process.env.PRIVACY_URL || (process.env.DOMAIN) ? process.env.DOMAIN + '/privacy' : '',
+	tos:        process.env.TOS_URL     || (process.env.DOMAIN) ? process.env.DOMAIN + '/tos'     : '',
 	year:       process.env.YEAR        || (year > 2015) ? '2015-' + year : year,
-	logoUrl:    process.env.LOG_OURL    || 'logo.png',
+	logoUrl:    process.env.LOGO_URL    || 'logo.png',
 	faviconUrl: process.env.FAVICON_URL || 'favicon.png'
 };
 var shorts  = require('./shorts.json');
@@ -123,6 +125,8 @@ function render(res, name, $msg) {
 			.replace('$year',        shortIt.year)
 			.replace('$logoUrl',     shortIt.logoUrl)
 			.replace('$faviconUrl',  shortIt.faviconUrl)
+			.replace('$privacyUrl',  shortIt.privacyUrl)
+			.replace('$tosUrl',      shortIt.tosUrl)
 			.replace('$packageName', pak.name)
 			.replace('$packageVer',  pak.version)
 		;
@@ -130,7 +134,7 @@ function render(res, name, $msg) {
 	res.send(result);
 	bump(name);
 	log.info('/' + name);
-} 
+}
 
 function renderPng(res, name, img) {
 	res.type('png');
