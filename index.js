@@ -5,10 +5,12 @@ var Client  = require('node-rest-client').Client;
 var client  = new Client();
 var year    = new Date().getFullYear();
 var shortIt = {
-	company: process.env.COMPANY || process.env.NAME || pak.name,
-	domain:  process.env.DOMAIN  || process.env.NAME || pak.name,
-	url:     process.env.URL     || 'https://github.com/yieme/shortit',
-	year:    process.env.YEAR    || (year > 2015) ? '2015-' + year : year
+	company:    process.env.COMPANY     || process.env.NAME || pak.name,
+	domain:     process.env.DOMAIN      || process.env.NAME || pak.name,
+	url:        process.env.URL         || 'https://github.com/yieme/shortit',
+	year:       process.env.YEAR        || (year > 2015) ? '2015-' + year : year,
+	logoUrl:    process.env.LOG_OURL    || 'logo.png',
+	faviconUrl: process.env.FAVICON_URL || 'favicon.png'
 };
 var shorts  = require('./shorts.json');
 var fs      = require('fs');
@@ -115,10 +117,12 @@ function render(res, name, $msg) {
 	var result = template.replace('$msg', $msg);
 	for(var max=10; max>0&& result.indexOf('$') >= 0; max--) {
 		result = result
-			.replace('$company', shortIt.company)
-			.replace('$url',     shortIt.url)
-			.replace('$domain',  shortIt.domain)
-			.replace('$year',    shortIt.year)
+			.replace('$company',    shortIt.company)
+			.replace('$url',        shortIt.url)
+			.replace('$domain',     shortIt.domain)
+			.replace('$year',       shortIt.year)
+			.replace('$logoUrl',    shortIt.logoUrl)
+			.replace('$faviconUrl', shortIt.faviconUrl)
 		;
 	}
 	res.send(result);
