@@ -1,4 +1,4 @@
-# shortit
+# shortIt
 A quick ShortURL server with data via external JSON database. Includes Stats and LogEntries logging.
 
 Use local `shorts.json` data or remote JSON data for shorts. Use firebase to manage your data.
