@@ -130,7 +130,7 @@ function render(res, name, $msg) {
 	res.send(result);
 	bump(name);
 	log.info('/' + name);
-}
+} 
 
 function renderPng(res, name, img) {
 	res.type('png');
