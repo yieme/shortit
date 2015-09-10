@@ -154,7 +154,7 @@ app.get('/logo.png', function (req, res) {
 
 app.get('/', function (req, res) {
 	if (shorts._home) return doShort('_home', res);
-	render(res, '', home);
+	render(res, '_home', home);
 });
 
 app.get('/_reload', function (req, res) {
@@ -163,7 +163,7 @@ app.get('/_reload', function (req, res) {
 });
 
 app.get('/_stats', function (req, res) {
-	bump('/_stats');
+	bump('_stats');
 	stats._running = duration(+new Date() - started);
 	stats._updated = duration(+new Date() - lastUpdate);
 	sendJson(res, stats);
@@ -171,7 +171,7 @@ app.get('/_stats', function (req, res) {
 });
 
 app.get('/_stats/:short', function (req, res) {
-	bump('/_stats/*');
+	bump('_stats/*');
 	sendJson(res, stats[req.params.short]);
 	log.info('/_stats/' + req.params.short);
 });
