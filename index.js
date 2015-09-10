@@ -8,12 +8,16 @@ var shortIt = {
 	company:    process.env.COMPANY     || process.env.NAME || pak.name,
 	domain:     process.env.DOMAIN      || process.env.NAME || pak.name,
 	url:        process.env.URL         || 'https://github.com/yieme/shortit',
-	privacyUrl: process.env.PRIVACY_URL || (process.env.URL) ? process.env.URL + '/privacy' : '',
-	tosUrl:     process.env.TOS_URL     || (process.env.URL) ? process.env.URL + '/tos'     : '',
 	year:       process.env.YEAR        || (year > 2015) ? '2015-' + year : year,
 	logoUrl:    process.env.LOGO_URL    || 'logo.png',
 	faviconUrl: process.env.FAVICON_URL || 'favicon.png'
 };
+var footerLinks = '';
+for (var i=1; i<=9; i++) {
+	if (process.env['FOOTER'+i]) {
+		footerLinks += '<a href="' + process.env['FOOTER_URL'+i]+ '">' + process.env['FOOTER'+i] + '</a> ';
+	}
+}
 var shorts  = require('./shorts.json');
 var fs      = require('fs');
 var shortsDataUrl = process.env.DATA_URL;
@@ -125,10 +129,9 @@ function render(res, name, $msg) {
 			.replace('$year',        shortIt.year)
 			.replace('$logoUrl',     shortIt.logoUrl)
 			.replace('$faviconUrl',  shortIt.faviconUrl)
-			.replace('$privacyUrl',  shortIt.privacyUrl)
-			.replace('$tosUrl',      shortIt.tosUrl)
 			.replace('$packageName', pak.name)
 			.replace('$packageVer',  pak.version)
+			.replace('$footerLinks', footerLinks)
 		;
 	}
 	res.send(result);
