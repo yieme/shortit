@@ -117,12 +117,14 @@ function render(res, name, $msg) {
 	var result = template.replace('$msg', $msg);
 	for(var max=10; max>0&& result.indexOf('$') >= 0; max--) {
 		result = result
-			.replace('$company',    shortIt.company)
-			.replace('$url',        shortIt.url)
-			.replace('$domain',     shortIt.domain)
-			.replace('$year',       shortIt.year)
-			.replace('$logoUrl',    shortIt.logoUrl)
-			.replace('$faviconUrl', shortIt.faviconUrl)
+			.replace('$company',     shortIt.company)
+			.replace('$url',         shortIt.url)
+			.replace('$domain',      shortIt.domain)
+			.replace('$year',        shortIt.year)
+			.replace('$logoUrl',     shortIt.logoUrl)
+			.replace('$faviconUrl',  shortIt.faviconUrl)
+			.replace('$packageName', pak.name)
+			.replace('$packageVer',  pak.version)
 		;
 	}
 	res.send(result);
@@ -146,11 +148,6 @@ app.get('/logo.png', function (req, res) {
 	renderPng(res, 'logo', logo);
 });
 
-app.get('/_about', function (req, res) {
-	var msg = pak.version + ' ' + duration(+new Date() - started) + '-' + duration(+new Date() - lastUpdate);
-	render(res, '_about', pak.name + '</h1><sup style="color:gray">' + msg);
-});
-
 app.get('/', function (req, res) {
 	if (shorts._home) return doShort('_home', res);
 	render(res, '', home);
@@ -163,6 +160,8 @@ app.get('/_reload', function (req, res) {
 
 app.get('/_stats', function (req, res) {
 	bump('/_stats');
+	stats._running = duration(+new Date() - started);
+	stats._updated = duration(+new Date() - lastUpdate);
 	sendJson(res, stats);
 	log.info('/_stats ' + JSON.stringify(stats));
 });
