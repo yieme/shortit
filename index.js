@@ -248,7 +248,7 @@ loadTemplate('buttonLink', function(data) {
 	data = data || '';
 	for (var i=1; i<=9; i++) {
 		if (process.env['BUTTON'+i]) {
-			footerLinks += data
+			buttonLinks += data
 				.replace('$url',  process.env[ 'BUTTON_URL' + i ])
 				.replace('$text', process.env[ 'BUTTON'     + i ])
 			;
