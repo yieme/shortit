@@ -10,8 +10,10 @@ Environment variables:
 - `DATA_URL` ex: `https://shortit.firebaseio.com/shorts.json`
 - `FAVICON_URL`
 - `LOGO_URL`
+- `BUTTON1` .. `BUTTON9` Button link text, ex: Donate
+- `BUTTON_URL1` .. `BUTTON_URL9` Button link, ex: `http://example.com/donate`
 - `FOOTER1` .. `FOOTER9` Footer link text, ex: Privacy
-- `FOOTER_URL1` .. `FOOTER_URL9` Footer link, ex: example/privacy
+- `FOOTER_URL1` .. `FOOTER_URL9` Footer link, ex: `http://example.com/privacy`
 - `PORT` default: `5000` for heroku
 - `RELOAD` reload data frequency, default daily
 - `LOGENTRIES` logentries key

@@ -13,11 +13,7 @@ var shortIt = {
 	faviconUrl: process.env.FAVICON_URL || 'favicon.png'
 };
 var footerLinks = '';
-for (var i=1; i<=9; i++) {
-	if (process.env['FOOTER'+i]) {
-		footerLinks += '<a href="' + process.env['FOOTER_URL'+i]+ '">' + process.env['FOOTER'+i] + '</a> ';
-	}
-}
+var buttonLinks = '';
 var shorts  = require('./shorts.json');
 var fs      = require('fs');
 var shortsDataUrl = process.env.DATA_URL;
@@ -131,6 +127,7 @@ function render(res, name, $msg) {
 			.replace('$faviconUrl',  shortIt.faviconUrl)
 			.replace('$packageName', pak.name)
 			.replace('$packageVer',  pak.version)
+			.replace('$buttonLinks', buttonLinks)
 			.replace('$footerLinks', footerLinks)
 		;
 	}
@@ -206,10 +203,14 @@ function loadFile(path, cb) {
 	  if (data && !err) {
 			log.info('Loaded ' + path);
 		} else {
-			log.warning('Unable to load template.html');
+			log.warning('Unable to load ' + path);
 		}
 		cb(data);
 	});
+}
+
+function loadTemplate(name, cb) {
+	loadFile('./templates/' + name + '.html', cb);
 }
 
 function loadPng(path, cb) {
@@ -217,20 +218,42 @@ function loadPng(path, cb) {
 	  if (data && !err) {
 			log.info('Loaded ' + path);
 		} else {
-			log.warning('Unable to load template.html');
+			log.warning('Unable to load ' + path);
 		}
 		cb(data);
 	});
 }
 
-loadFile('template.html', function(data) {
+loadTemplate('index', function(data) {
 	template = data || '';
 });
-loadFile('home.html', function(data) {
+loadTemplate('home', function(data) {
 	home = data || '';
 });
-loadFile('404.html', function(data) {
+loadTemplate('404', function(data) {
 	msg404 = data || '';
+});
+loadTemplate('footerLink', function(data) {
+	data = data || '';
+	for (var i=1; i<=9; i++) {
+		if (process.env['FOOTER'+i]) {
+			footerLinks += data
+				.replace('$url',  process.env[ 'FOOTER_URL' + i ])
+				.replace('$text', process.env[ 'FOOTER'     + i ])
+			;
+		}
+	}
+});
+loadTemplate('buttonLink', function(data) {
+	data = data || '';
+	for (var i=1; i<=9; i++) {
+		if (process.env['BUTTON'+i]) {
+			footerLinks += data
+				.replace('$url',  process.env[ 'BUTTON_URL' + i ])
+				.replace('$text', process.env[ 'BUTTON'     + i ])
+			;
+		}
+	}
 });
 loadPng('favicon.png', function(data) {
 	favicon = data || null;
