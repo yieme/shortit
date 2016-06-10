@@ -1,15 +1,18 @@
 {
   "name": "shortit",
-  "version": "4.2.2",
+  "version": "4.2.3",
   "description": "A quick ShortURL server with data via external JSON database. Includes Stats and LogEntries logging",
   "main": "index.js",
   "scripts": {
     "test": "exit 0"
   },
   "author": "Jim Kalac",
+  "engines": {
+    "node": "0.12.7"
+  },
   "dependencies": {
-    "express": "^4.13.3",
-    "le_node": "^1.1.0",
-    "node-rest-client": "^1.5.1"
+    "express": "4.13.3",
+    "le_node": "1.1.0",
+    "node-rest-client": "1.5.1"
   }
 }
