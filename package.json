@@ -8,7 +8,7 @@
   },
   "author": "Jim Kalac",
   "engines": {
-    "node": "0.12.x"
+    "node": "4.4.x"
   },
   "dependencies": {
     "express": "4.13.3",
