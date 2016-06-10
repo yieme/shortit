@@ -21,5 +21,9 @@ Environment variables:
 - `CONSOLE_PASSTHRU` URL stub for console log passthru. Ex: value of `/console`. So a visit to: `/console/test` would log `test` to the console
 - `LOG_PASSTHRU` URL stub for log passthru. Ex: value of `/log`. So a visit to: `/log/yo` would log `yo` to the logentries, if active, or console
 
+## Notes
+
+- node-rest-client 1.5.x is ok; however, 1.8.0 breaks
+
 ## License
 MIT
