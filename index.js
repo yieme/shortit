@@ -7,6 +7,8 @@ var year    = new Date().getFullYear();
 var shortIt = {
 	company:    process.env.COMPANY     || process.env.NAME || pak.name,
 	domain:     process.env.DOMAIN      || process.env.NAME || pak.name,
+	name:       process.env.APPNAME     || pak.name,
+	version:    process.env.APPVERSION  || pak.version,
 	url:        process.env.URL         || 'https://github.com/yieme/shortit',
 	year:       process.env.YEAR        || (year > 2015) ? '2015-' + year : year,
 	logoUrl:    process.env.LOGO_URL    || 'logo.png',
@@ -119,7 +121,7 @@ function doShort(short, res) {
 
 function render(res, name, $msg) {
 	var result = template.replace('$msg', $msg);
-	for(var max=10; max>0&& result.indexOf('$') >= 0; max--) {
+	for(var max=10; max>0 && result.indexOf('$') >= 0; max--) {
 		result = result
 			.replace('$company',     shortIt.company)
 			.replace('$url',         shortIt.url)
@@ -127,8 +129,8 @@ function render(res, name, $msg) {
 			.replace('$year',        shortIt.year)
 			.replace('$logoUrl',     shortIt.logoUrl)
 			.replace('$faviconUrl',  shortIt.faviconUrl)
-			.replace('$packageName', pak.name)
-			.replace('$packageVer',  pak.version)
+			.replace('$packageName', shortIt.name)
+			.replace('$packageVer',  shortIt.version)
 			.replace('$buttonLinks', buttonLinks)
 			.replace('$footerLinks', footerLinks)
 		;

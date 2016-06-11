@@ -20,6 +20,8 @@ Environment variables:
 - `LOGENTRIES_BUFFER` logentries buffer size, default `100`
 - `CONSOLE_PASSTHRU` URL stub for console log passthru. Ex: value of `/console`. So a visit to: `/console/test` would log `test` to the console
 - `LOG_PASSTHRU` URL stub for log passthru. Ex: value of `/log`. So a visit to: `/log/yo` would log `yo` to the logentries, if active, or console
+- `APPNAME` generator application name override
+- `APPVERSION` generator application version override
 
 ## Notes
 
