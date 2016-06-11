@@ -14,8 +14,9 @@ var shortIt = {
 	logoUrl:    process.env.LOGO_URL    || 'logo.png',
 	faviconUrl: process.env.FAVICON_URL || 'favicon.png'
 };
-var conPassThru = process.env.CONSOLE_PASSTHRU
-var logPassThru = process.env.LOG_PASSTHRU
+var conPassThru    = process.env.CONSOLE_PASSTHRU
+var logPassThru    = process.env.LOG_PASSTHRU
+var passThruReturn = process.env.PASSTHRU_MESSAGE || '{ok:1}'
 var footerLinks = '';
 var buttonLinks = '';
 var shorts  = require('./shorts.json');
@@ -183,14 +184,14 @@ app.get('/_stats/:short', function (req, res) {
 if (conPassThru) {
 	app.get(conPassThru+ '/:data', function (req, res) {
 		console.log(req.params.data);
-		res.send('ok')
+		res.send(passThruReturn)
 	});
 }
 
 if (logPassThru) {
 	app.get(logPassThru+ '/:data', function (req, res) {
 		log.info(req.params.data);
-		res.send('ok')
+		res.send(passThruReturn)
 	});
 }
 
