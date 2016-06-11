@@ -22,6 +22,7 @@ Environment variables:
 - `LOG_PASSTHRU` URL stub for log passthru. Ex: value of `/log`. So a visit to: `/log/yo` would log `yo` to the logentries, if active, or console
 - `APPNAME` generator application name override
 - `APPVERSION` generator application version override
+- `MESSAGE` MESSAGE override
 
 ## Notes
 

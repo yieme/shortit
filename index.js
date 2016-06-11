@@ -158,7 +158,7 @@ app.get('/logo.png', function (req, res) {
 
 app.get('/', function (req, res) {
 	if (shorts._home) return doShort('_home', res);
-	render(res, '_home', home);
+	render(res, '_home', process.env.MESSAGE || home);
 });
 
 app.get('/_reload', function (req, res) {
