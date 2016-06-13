@@ -30,6 +30,8 @@ Environment variables:
 - `HEADERNAM2` Optional header name 2
 - `HEADERVAL2` Optional header value 2
 - `NO_POWERED_BY` If set X-Powered-By is not sent
+- `HEADCODE` Optional pre-`</head>` code
+- `BODYCODE` Optional pre-`</body>` code
 
 ## Notes
 

@@ -14,6 +14,8 @@ var shortIt = {
 	logoUrl:    process.env.LOGO_URL      || 'logo.png',
 	faviconUrl: process.env.FAVICON_URL   || 'favicon.png',
 	nopowered:  process.env.NO_POWERED_BY || false,
+	headCode:   process.env.HEADCODE      || '',
+	bodyCode:   process.env.BODYCODE      || '',
 	header1:    process.env.HEADERNAM     || false,
 	value1:     process.env.HEADERVAL     || false,
 	header2:    process.env.HEADERNAM2    || false,
@@ -153,6 +155,8 @@ function render(res, name, $msg) {
 			.replace('$faviconUrl',  shortIt.faviconUrl)
 			.replace('$packageName', shortIt.name)
 			.replace('$packageVer',  shortIt.version)
+			.replace('$headCode',    shortIt.headCode)
+			.replace('$bodyCode',    shortIt.bodyCode)
 			.replace('$buttonLinks', buttonLinks)
 			.replace('$footerLinks', footerLinks)
 		;
