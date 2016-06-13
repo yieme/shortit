@@ -5,15 +5,23 @@ var Client  = require('node-rest-client').Client;
 var client  = new Client();
 var year    = new Date().getFullYear();
 var shortIt = {
-	company:    process.env.COMPANY     || process.env.NAME || pak.name,
-	domain:     process.env.DOMAIN      || process.env.NAME || pak.name,
-	name:       process.env.APPNAME     || pak.name,
-	version:    process.env.APPVERSION  || pak.version,
-	url:        process.env.URL         || 'https://github.com/yieme/shortit',
-	year:       process.env.YEAR        || (year > 2015) ? '2015-' + year : year,
-	logoUrl:    process.env.LOGO_URL    || 'logo.png',
-	faviconUrl: process.env.FAVICON_URL || 'favicon.png'
+	company:    process.env.COMPANY       || process.env.NAME || process.env.APPNAME || pak.name,
+	domain:     process.env.DOMAIN        || process.env.NAME || process.env.APPNAME || pak.name,
+	name:       process.env.APPNAME       || pak.name,
+	version:    process.env.APPVERSION    || pak.version,
+	url:        process.env.URL           || 'https://github.com/yieme/shortit',
+	year:       process.env.YEAR          || (year > 2015) ? '2015-' + year : year,
+	logoUrl:    process.env.LOGO_URL      || 'logo.png',
+	faviconUrl: process.env.FAVICON_URL   || 'favicon.png',
+	nopowered:  process.env.NO_POWERED_BY || false,
+	header1:    process.env.HEADERNAM     || false,
+	value1:     process.env.HEADERVAL     || false,
+	header2:    process.env.HEADERNAM2    || false,
+	value2:     process.env.HEADERVAL2    || false,
+	server:     process.env.SERVER        || false
 };
+
+shortIt.nameVersion = shortIt.name + '/' + shortIt.version
 var conPassThru    = process.env.CONSOLE_PASSTHRU
 var logPassThru    = process.env.LOG_PASSTHRU
 var passThruReturn = process.env.PASSTHRU_MESSAGE || '{ok:1}'
@@ -43,6 +51,19 @@ log.error         = log.error   || log.err;
 log.warning       = log.warning || log.warn;
 var favicon_png   = '';
 var logo_png      = '';
+
+app.use(function customHeaders( req, res, next ){
+  // Switch off the default 'X-Powered-By: Express' header
+	if (shortIt.nopowered) {
+		app.disable( 'x-powered-by' );
+	} else {
+  	res.setHeader( 'X-Powered-By', shortIt.nameVersion);
+	}
+	if (shortIt.server)  res.setHeader('Server', shortIt.server)
+	if (shortIt.header1) res.setHeader(shortIt.header1, shortIt.value1)
+	if (shortIt.header2) res.setHeader(shortIt.header2, shortIt.value2)
+  next()
+})
 
 function bump(area) {
 	var now   = new Date();

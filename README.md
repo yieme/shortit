@@ -24,6 +24,12 @@ Environment variables:
 - `APPNAME` generator application name override
 - `APPVERSION` generator application version override
 - `MESSAGE` MESSAGE override
+- `SERVER` Set the server header
+- `HEADERNAM` Optional header name
+- `HEADERVAL` Optional header value
+- `HEADERNAM2` Optional header name 2
+- `HEADERVAL2` Optional header value 2
+- `NO_POWERED_BY` If set X-Powered-By is not sent
 
 ## Notes
 
