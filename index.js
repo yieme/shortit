@@ -227,7 +227,7 @@ if (conPassThru) {
 
 if (logPassThru) {
 	app.get(logPassThru, function (req, res) {
-		data = req.originalUrl.replaceIgnoreCase(conPassThru, '')
+		data = req.originalUrl.replaceIgnoreCase(logPassThru, '')
 		if (data.substr(0,1) == '/') data = data.replace('/', '')
 		if (data.substr(0,1) == '?') data = data.replace('?', '')
 		if (passThruMaxLen && data.length > passThruMaxLen) {
