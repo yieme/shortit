@@ -27,6 +27,7 @@ shortIt.nameVersion = shortIt.name + '/' + shortIt.version
 var conPassThru    = process.env.CONSOLE_PASSTHRU
 var logPassThru    = process.env.LOG_PASSTHRU
 var passThruReturn = process.env.PASSTHRU_MESSAGE || '{ok:1}'
+var passThruMaxLen = (process.env.PASSTHRU_MAXLEN) ? parseInt(process.env.PASSTHRU_MAXLEN) : 0 // maximum length of pass-thru string
 var footerLinks = '';
 var buttonLinks = '';
 var shorts  = require('./shorts.json');
@@ -206,16 +207,33 @@ app.get('/_stats/:short', function (req, res) {
 	log.info('/_stats/' + req.params.short);
 });
 
+String.prototype.replaceIgnoreCase = function(strReplace, strWith) {
+    var reg = new RegExp(strReplace, 'i'); // i=ignore case, g=global (ie all)
+    return this.replace(reg, strWith);
+};
+
 if (conPassThru) {
-	app.get(conPassThru+ '/:data', function (req, res) {
-		console.log(req.params.data);
+	app.get(conPassThru, function (req, res) {
+		data = req.originalUrl.replaceIgnoreCase(conPassThru, '')
+		if (data.substr(0,1) == '/') data = data.replace('/', '')
+		if (data.substr(0,1) == '?') data = data.replace('?', '')
+		if (passThruMaxLen && data.length > passThruMaxLen) {
+			data = data.substr(0, passThruMaxLen)
+		}
+		console.log('data', data);
 		res.send(passThruReturn)
 	});
 }
 
 if (logPassThru) {
-	app.get(logPassThru+ '/:data', function (req, res) {
-		log.info(req.params.data);
+	app.get(logPassThru, function (req, res) {
+		data = req.originalUrl.replaceIgnoreCase(conPassThru, '')
+		if (data.substr(0,1) == '/') data = data.replace('/', '')
+		if (data.substr(0,1) == '?') data = data.replace('?', '')
+		if (passThruMaxLen && data.length > passThruMaxLen) {
+			data = data.substr(0, passThruMaxLen)
+		}
+		log.info(data);
 		res.send(passThruReturn)
 	});
 }
