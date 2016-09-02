@@ -1,2 +1,2 @@
-*.html
+/:name.html
   Content-Type: text/html; charset=iso-8859-1
