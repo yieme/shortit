@@ -5,6 +5,7 @@ var Client  = require('node-rest-client').Client;
 var client  = new Client();
 var year    = new Date().getFullYear();
 var envic   = require('envic')
+var jsonic  = require('jsonic')
 var shortIt = {
 	company:    process.env.COMPANY       || process.env.NAME || process.env.APPNAME || pak.name,
 	domain:     process.env.DOMAIN        || process.env.NAME || process.env.APPNAME || pak.name,
@@ -61,6 +62,8 @@ if (logentriesConfig.token) {
 var logUrl = envic('LOG_URL')
 console.log('logUrl:', logUrl)
 if (logUrl) {
+	logUrl = jsonic(logUrl)
+	console.log('logUrl:', logUrl)
 	console.log('Log transport: Http', logUrl.host)
 	logger.add( winston.transports.Http, logUrl )
 }
