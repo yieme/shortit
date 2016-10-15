@@ -5,7 +5,6 @@ var Client  = require('node-rest-client').Client;
 var client  = new Client();
 var year    = new Date().getFullYear();
 var envic   = require('envic')
-var jsonic  = require('jsonic')
 
 var shortIt = {
 	company:    process.env.COMPANY       || process.env.NAME || process.env.APPNAME || pak.name,
@@ -62,7 +61,6 @@ if (logentriesConfig.token) {
 }
 var logUrl = envic('LOG_URL')
 if (logUrl) {
-	logUrl = jsonic(logUrl)
 	console.log('Log transport: Http', logUrl.host)
 	logger.add( winston.transports.Http, logUrl )
 }
@@ -75,7 +73,6 @@ var log = {
 var logFirebase = envic('LOG_FIREBASE')
 var firelogRef
 if (logFirebase) {
-	logFirebase = jsonic(logFirebase)
 	console.log('Log transport: Http', logFirebase.url)
 	var Firebase = require('firebase');
 	var firelogRef = new Firebase(logFirebase.url);

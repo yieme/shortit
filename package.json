@@ -13,7 +13,7 @@
     "node": "5.11.x"
   },
   "dependencies": {
-    "envic": "^1.0.1",
+    "envic": "^1.0.3",
     "express": "4.13.x",
     "firebase": "^2.4.2",
     "jsonic": "^0.2.2",
