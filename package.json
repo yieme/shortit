@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "exit 0",
-    "tag": "bump --no-tags; V=$(node -e 'console.log(require(\"./package.json\").version)'); git add package.json; git commit -m $V; git tag -a $V -m $V"
+    "tag": "V=$(node -e 'console.log(require(\"./package.json\").version)'); git add package.json; git commit -m $V; git tag -a $V -m $V"
   },
   "author": "Jim Kalac",
   "engines": {
