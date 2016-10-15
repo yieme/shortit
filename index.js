@@ -59,6 +59,7 @@ if (logentriesConfig.token) {
 	logger.add(new winston.transports.Logentries(logentriesConfig))
 }
 var logUrl = envic('LOG_URL')
+console.log('logUrl:', logUrl)
 if (logUrl) {
 	console.log('Log transport: Http', logUrl.host)
 	logger.add( winston.transports.Http, logUrl )
