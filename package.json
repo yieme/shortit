@@ -11,8 +11,10 @@
     "node": "5.11.x"
   },
   "dependencies": {
+    "envic": "^1.0.1",
     "express": "4.13.x",
-    "le_node": "1.3.x",
-    "node-rest-client": "1.5.x"
+    "node-rest-client": "1.5.x",
+    "winston": "^2.2.0",
+    "winston-logentries": "^2.0.0"
   }
 }

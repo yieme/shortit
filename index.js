@@ -4,6 +4,7 @@ var pak     = require('./package.json');
 var Client  = require('node-rest-client').Client;
 var client  = new Client();
 var year    = new Date().getFullYear();
+var envic   = require('envic')
 var shortIt = {
 	company:    process.env.COMPANY       || process.env.NAME || process.env.APPNAME || pak.name,
 	domain:     process.env.DOMAIN        || process.env.NAME || process.env.APPNAME || pak.name,
@@ -24,7 +25,7 @@ var shortIt = {
 };
 
 shortIt.nameVersion = shortIt.name + '/' + shortIt.version
-var conPassThru    = process.env.CONSOLE_PASSTHRU
+var conPassThru    = process.env.CONSOLE_PASSTHRU // console pass-thru
 var logPassThru    = process.env.LOG_PASSTHRU
 var passThruReturn = process.env.PASSTHRU_MESSAGE || '{ok:1}'
 var passThruMaxLen = (process.env.PASSTHRU_MAXLEN) ? parseInt(process.env.PASSTHRU_MAXLEN) : 0 // maximum length of pass-thru string
@@ -42,16 +43,38 @@ var started       = +new Date();
 var refreshWait   = 5000; // 5 seconds between refresh requests
 var reloadFrequency = process.env.RELOAD || 24*60*60*1000; /// daily default
 var stats         = {};
-var Logger        = require('le_node');
+//var Logger        = require('le_node');
+var winston    = require('winston')
+var Logentries = require('winston-logentries');
 var logentriesConfig = {
 	token:      process.env.LOGENTRIES,
 	bufferSize: process.env.LOGENTRIES_BUFFER || 100,
 	secure:     1,
 	'console':  1
 };
-var log           = ((process.env.LOGENTRIES)) ? new Logger(logentriesConfig) : console;
-log.error         = log.error   || log.err;
-log.warning       = log.warning || log.warn;
+var logger      = new winston.Logger()
+logger.add(winston.transports.Console)
+if (logentriesConfig.token) {
+	logger.add(new winston.transports.Logentries(logentriesConfig))
+}
+var logUrls = envic('Log URLs')
+if (logUrls) {
+	if (!logUrls[0]) {
+		var tmp = [logUrls]
+		logUrls = tmp
+	}
+	for (var i=0; i < logUrls.length; i++) {
+		logger.add( winston.transports.Http, logUrls[i] )
+	}
+}
+var log = {
+	info:    (logentriesConfig.token) ? function(m) { logger.log('info',    m)} : console.log,
+	warning: (logentriesConfig.token) ? function(m) { logger.log('warning', m)} : console.warn,
+	error:   (logentriesConfig.token) ? function(m) { logger.log('error',   m)} : console.error
+}
+//var log           = ((process.env.LOGENTRIES)) ? new Logger(logentriesConfig) : console;
+//log.error         = log.error   || log.err;
+//log.warning       = log.warning || log.warn;
 var favicon_png   = '';
 var logo_png      = '';
 
@@ -212,7 +235,7 @@ String.prototype.replaceIgnoreCase = function(strReplace, strWith) {
     return this.replace(reg, strWith);
 };
 
-if (conPassThru) {
+if (conPassThru) { // console pass-thru
 	app.get(conPassThru, function (req, res) {
 		data = req.originalUrl.replaceIgnoreCase(conPassThru, '')
 		if (data.substr(0,1) == '/') data = data.replace('/', '')
