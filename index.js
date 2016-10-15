@@ -55,6 +55,7 @@ var logentriesConfig = {
 var logger      = new winston.Logger()
 logger.add(winston.transports.Console)
 if (logentriesConfig.token) {
+	console.log('Log transport: LogEntries')
 	logger.add(new winston.transports.Logentries(logentriesConfig))
 }
 var logUrls = envic('Log URLs')
@@ -63,6 +64,7 @@ if (logUrls) {
 		var tmp = [logUrls]
 		logUrls = tmp
 	}
+	console.log('Log transport: Http')
 	for (var i=0; i < logUrls.length; i++) {
 		logger.add( winston.transports.Http, logUrls[i] )
 	}
