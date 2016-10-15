@@ -73,25 +73,21 @@ var log = {
 }
 
 var logFirebase = envic('LOG_FIREBASE')
+var firelogRef
 if (logFirebase) {
 	logFirebase = jsonic(logFirebase)
 	console.log('Log transport: Http', logFirebase.url)
 	var Firebase = require('firebase');
-	var ref = new Firebase(logFirebase.url);
-	ref.auth(logFirebase.token, function(error, result) {
+	var firelogRef = new Firebase(logFirebase.url);
+	firelogRef.auth(logFirebase.token, function(error, result) {
 	  if (error) {
 	    console.log("Firebase Authentication Failed!", error);
+			firelogRef = undefined
 	  } else {
 	    console.log("Firebase Authenticated successfully with payload:", result.auth);
 	    console.log("Firebase Auth expires at:", new Date(result.expires * 1000));
 	  }
 	})
-	var priorlog = log
-	log = {
-		info:    function(m) { ref.push(m); priorlog.info(m) },
-		warning: priorlog.warning,
-		error:   priorlog.error,
-	}
 }
 
 var favicon_png   = '';
@@ -276,6 +272,9 @@ if (logPassThru) {
 			data = data.substr(0, passThruMaxLen)
 		}
 		log.info(data);
+		if (firelogRef) {
+			firelogRef.push(data)
+		}
 		res.send(passThruReturn)
 	});
 }
