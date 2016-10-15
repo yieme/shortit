@@ -6,6 +6,7 @@ var client  = new Client();
 var year    = new Date().getFullYear();
 var envic   = require('envic')
 var jsonic  = require('jsonic')
+
 var shortIt = {
 	company:    process.env.COMPANY       || process.env.NAME || process.env.APPNAME || pak.name,
 	domain:     process.env.DOMAIN        || process.env.NAME || process.env.APPNAME || pak.name,
@@ -70,9 +71,29 @@ var log = {
 	warning: (logentriesConfig.token) ? function(m) { logger.log('warning', m)} : console.warn,
 	error:   (logentriesConfig.token) ? function(m) { logger.log('error',   m)} : console.error
 }
-//var log           = ((process.env.LOGENTRIES)) ? new Logger(logentriesConfig) : console;
-//log.error         = log.error   || log.err;
-//log.warning       = log.warning || log.warn;
+
+var logFirebase = envic('LOG_FIREBASE')
+if (logFirebase) {
+	logFirebase = jsonic(logFirebase)
+	console.log('Log transport: Http', logFirebase.url)
+	var Firebase = require('firebase');
+	var ref = new Firebase(logFirebase.url);
+	ref.auth(logFirebase.token, function(error, result) {
+	  if (error) {
+	    console.log("Firebase Authentication Failed!", error);
+	  } else {
+	    console.log("Firebase Authenticated successfully with payload:", result.auth);
+	    console.log("Firebase Auth expires at:", new Date(result.expires * 1000));
+	  }
+	})
+	var priorlog = log
+	log = {
+		info:    function(m) { ref.push(m); priorlog.info(m) },
+		warning: priorlog.warning },
+		error:   priorlog.error },
+	}
+}
+
 var favicon_png   = '';
 var logo_png      = '';
 

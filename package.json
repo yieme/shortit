@@ -15,6 +15,7 @@
   "dependencies": {
     "envic": "^1.0.1",
     "express": "4.13.x",
+    "firebase": "^2.4.2",
     "jsonic": "^0.2.2",
     "node-rest-client": "1.5.x",
     "winston": "^2.2.0",
