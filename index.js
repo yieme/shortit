@@ -271,9 +271,6 @@ var server = app.listen(app.get('port'), function () {
   var host = server.address().address;
   var port = server.address().port;
   log.info(pak.name + ' ' + pak.version + ' listening on: ' + host + ' port: ' + port + ' at: ' + new Date().toString());
-	if (!process.env.LOGENTRIES) {
-		log.warning('LOGENTRIES not defined');
-	}
 	if (!process.env.COMPANY) {
 		log.warning('COMPANY not defined');
 	}
