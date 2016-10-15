@@ -89,8 +89,8 @@ if (logFirebase) {
 	var priorlog = log
 	log = {
 		info:    function(m) { ref.push(m); priorlog.info(m) },
-		warning: priorlog.warning },
-		error:   priorlog.error },
+		warning: priorlog.warning,
+		error:   priorlog.error,
 	}
 }
 
