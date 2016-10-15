@@ -45,7 +45,6 @@ var reloadFrequency = process.env.RELOAD || 24*60*60*1000; /// daily default
 var stats         = {};
 //var Logger        = require('le_node');
 var winston    = require('winston')
-var Logentries = require('winston-logentries');
 var logentriesConfig = {
 	token:      process.env.LOGENTRIES,
 	bufferSize: process.env.LOGENTRIES_BUFFER || 100,
@@ -56,6 +55,7 @@ var logger      = new winston.Logger()
 logger.add(winston.transports.Console)
 if (logentriesConfig.token) {
 	console.log('Log transport: LogEntries')
+	var Logentries = require('winston-logentries')
 	logger.add(new winston.transports.Logentries(logentriesConfig))
 }
 var logUrls = envic('Log URLs')
