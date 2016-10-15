@@ -58,7 +58,8 @@ if (logentriesConfig.token) {
 	var Logentries = require('winston-logentries')
 	logger.add(new winston.transports.Logentries(logentriesConfig))
 }
-var logUrls = envic('Log URLs')
+var logUrls = envic('LOG_URLS')
+console.log('logUrls:', logUrls)
 if (logUrls) {
 	if (!logUrls[0]) {
 		var tmp = [logUrls]
