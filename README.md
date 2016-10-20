@@ -8,6 +8,7 @@ Environment variables:
 - `DOMAIN` ex: `examp.le`
 - `URL`    Company URL, ex: example.com
 - `DATA_URL` ex: `https://shortit.firebaseio.com/shorts.json`
+- `GA_ID`  Google Analytics ID
 - `FAVICON_URL`
 - `LOGO_URL`
 - `BUTTON1` .. `BUTTON9` Button link text, ex: Donate

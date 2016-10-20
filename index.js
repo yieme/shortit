@@ -33,7 +33,12 @@ var passThruMaxLen = (process.env.PASSTHRU_MAXLEN) ? parseInt(process.env.PASSTH
 var footerLinks = '';
 var buttonLinks = '';
 var shorts  = require('./shorts.json');
-var fs      = require('fs');
+var fs      = require('fs')
+var gaTxt   = fs.readFileSync('./templates/ga.js')
+var gaid    = envic('GA Id')
+if (gaid) {
+	gaTxt = gaTxt.replace('$GAID', gaid)
+}
 var shortsDataUrl = process.env.DATA_URL;
 app.set('port', (process.env.PORT || 5000));
 var template      = '<br><br><center><h1 style="font-family:arial">$msg';
@@ -301,6 +306,9 @@ function loadFile(path, cb) {
 			log.info('Loaded ' + path);
 		} else {
 			log.warning('Unable to load ' + path);
+		}
+		if (gaid) { // if Google Analytics ID
+			data = data.replace('</body>', gaTxt + '</body') // add Google Analytics
 		}
 		cb(data);
 	});
