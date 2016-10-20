@@ -39,6 +39,7 @@ var gaid    = envic('GA Id')
 if (gaid) {
 	gaTxt = gaTxt.replace('$GAID', gaid)
 }
+console.log('gaid:', gaid)
 var shortsDataUrl = process.env.DATA_URL;
 app.set('port', (process.env.PORT || 5000));
 var template      = '<br><br><center><h1 style="font-family:arial">$msg';
@@ -307,9 +308,7 @@ function loadFile(path, cb) {
 		} else {
 			log.warning('Unable to load ' + path);
 		}
-		if (gaid) { // if Google Analytics ID
-			data = data.replace('</body>', gaTxt + '</body') // add Google Analytics
-		}
+		data = data.replace('$analytics', (gaid) ? gaTxt : '')
 		cb(data);
 	});
 }
