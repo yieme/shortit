@@ -1,7 +1,7 @@
 var express = require('express');
 var app     = express();
-var pak     = require('./package.json');
-var Client  = require('node-rest-client').Client;
+var pak     = require('./package.json')
+var Client  = require('node-rest-client').Client
 var client  = new Client();
 var year    = new Date().getFullYear();
 var envic   = require('envic')
@@ -26,6 +26,10 @@ var shortIt = {
 };
 
 shortIt.nameVersion = shortIt.name + '/' + shortIt.version
+console.log('')
+console.log('- - - - - - - - - - - - - - - -')
+console.log(shortIt.nameVersion,'begin')
+
 var conPassThru    = process.env.CONSOLE_PASSTHRU // console pass-thru
 var logPassThru    = process.env.LOG_PASSTHRU
 var passThruReturn = process.env.PASSTHRU_MESSAGE || '{ok:1}'
@@ -36,8 +40,6 @@ var shorts  = require('./shorts.json');
 var fs      = require('fs')
 var gaTxt   = fs.readFileSync('./templates/ga.js', 'utf8')
 var gaid    = process.env.GA_ID
-console.log('')
-console.log('- - - - - - - - - - - - - - - -')
 console.log('gaid:', gaid,'-',process.env.GA_ID)
 if (gaid) {
 	gaTxt = gaTxt.replace('$GAID', gaid)
@@ -291,7 +293,7 @@ app.get('/:short', function (req, res) {
 var server = app.listen(app.get('port'), function () {
   var host = server.address().address;
   var port = server.address().port;
-  log.info(pak.name + ' ' + pak.version + ' listening on: ' + host + ' port: ' + port + ' at: ' + new Date().toString());
+  log.info(shortIt.nameVersion + ' listening on: ' + host + ' port: ' + port + ' at: ' + new Date().toString());
 	if (!process.env.COMPANY) {
 		log.warning('COMPANY not defined');
 	}
