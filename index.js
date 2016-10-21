@@ -36,10 +36,10 @@ var shorts  = require('./shorts.json');
 var fs      = require('fs')
 var gaTxt   = fs.readFileSync('./templates/ga.js')
 var gaid    = process.env.GA_ID
+console.log('gaid:', gaid,'-',process.env.GA_ID)
 if (gaid) {
 	gaTxt = gaTxt.replace('$GAID', gaid)
 }
-console.log('gaid:', gaid,'-',process.env.GA_ID)
 var shortsDataUrl = process.env.DATA_URL;
 app.set('port', (process.env.PORT || 5000));
 var template      = '<br><br><center><h1 style="font-family:arial">$msg';
