@@ -34,7 +34,7 @@ var footerLinks = '';
 var buttonLinks = '';
 var shorts  = require('./shorts.json');
 var fs      = require('fs')
-var gaTxt   = fs.readFileSync('./templates/ga.js')
+var gaTxt   = fs.readFileSync('./templates/ga.js', 'utf8')
 var gaid    = process.env.GA_ID
 console.log('gaid:', gaid,'-',process.env.GA_ID)
 if (gaid) {
