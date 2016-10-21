@@ -35,7 +35,7 @@ var buttonLinks = '';
 var shorts  = require('./shorts.json');
 var fs      = require('fs')
 var gaTxt   = fs.readFileSync('./templates/ga.js')
-var gaid    = envic('GA ID')
+var gaid    = process.env.GA_ID
 if (gaid) {
 	gaTxt = gaTxt.replace('$GAID', gaid)
 }
