@@ -42,6 +42,7 @@ var gaTxt   = fs.readFileSync('./templates/ga.js', 'utf8')
 var gaid    = process.env.GA_ID
 if (gaid) {
 	gaTxt = gaTxt.replace('$GAID', gaid)
+	console.log('Google Analytics:', gaid)
 }
 var shortsDataUrl = process.env.DATA_URL;
 app.set('port', (process.env.PORT || 5000));
