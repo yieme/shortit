@@ -263,7 +263,7 @@ if (conPassThru) { // console pass-thru
   if (conPassThru.indexOf('/*')<0) conPassThru += '/*'
 	console.log('CONSOLE_PASSTHRU:', conPassThru)
 	app.get(conPassThru, function (req, res) {
-		data = req.originalUrl.replaceIgnoreCase(conPassThru, '')
+		data = unescape(req.originalUrl.replaceIgnoreCase(conPassThru, ''))
 		if (data.substr(0,1) == '/') data = data.replace('/', '')
 		if (data.substr(0,1) == '?') data = data.replace('?', '')
 		if (passThruMaxLen && data.length > passThruMaxLen) {
