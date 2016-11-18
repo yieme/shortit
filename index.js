@@ -31,9 +31,7 @@ console.log('- - - - - - - - - - - - - - - -')
 console.log(shortIt.nameVersion,'begin')
 
 var conPassThru    = process.env.CONSOLE_PASSTHRU // console pass-thru
-console.log('CONSOLE_PASSTHRU.:', JSON.stringify(process.env.CONSOLE_PASSTHRU))
 var logPassThru    = process.env.LOG_PASSTHRU
-console.log('LOG_PASSTHRU.:',JSON.stringify(process.env.LOG_PASSTHRU))
 var passThruReturn = process.env.PASSTHRU_MESSAGE || '{ok:1}'
 var passThruMaxLen = (process.env.PASSTHRU_MAXLEN) ? parseInt(process.env.PASSTHRU_MAXLEN) : 255 // maximum length of pass-thru string
 var footerLinks = '';
@@ -275,6 +273,7 @@ if (conPassThru) { // console pass-thru
 
 if (logPassThru) {
 	console.log('LOG_PASSTHRU:', logPassThru)
+  console.log('passThurReturn:', passThruReturn)
 	app.get(logPassThru, function (req, res) {
 		console.log('log')
 		data = req.originalUrl.replaceIgnoreCase(logPassThru, '')
