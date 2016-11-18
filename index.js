@@ -275,10 +275,8 @@ if (logPassThru) {
   if (logPassThru[0] != '/') logPassThru = '/' + logPassThru
   if (logPassThru[logPassThru.length-1] == '/') logPassThru += '*'
   if (logPassThru.indexOf('/*')<0) logPassThru += '/*'
-	console.log('LOG_PASSTHRU:', logPassThru)
-  console.log('passThurReturn:', passThruReturn)
+  console.log('logPassThru:', logPassThru)
 	app.get(logPassThru, function (req, res) {
-		console.log('log')
 		data = req.originalUrl.replaceIgnoreCase(logPassThru, '')
 		if (data.substr(0,1) == '/') data = data.replace('/', '')
 		if (data.substr(0,1) == '?') data = data.replace('?', '')
