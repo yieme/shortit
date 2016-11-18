@@ -83,18 +83,39 @@ var log = {
 var logFirebase = envic('LOG_FIREBASE')
 var firelogRef
 if (logFirebase) {
-	console.log('Log transport: Http', logFirebase.url)
-	var Firebase = require('firebase');
-	var firelogRef = new Firebase(logFirebase.url);
-	firelogRef.auth(logFirebase.token, function(error, result) {
-	  if (error) {
-	    console.log("Firebase Authentication Failed!", error);
-			firelogRef = undefined
-	  } else {
-	    console.log("Firebase Authenticated successfully with payload:", result.auth);
-	    console.log("Firebase Auth expires at:", new Date(result.expires * 1000));
-	  }
-	})
+  if (!logFirebase.url) {
+    console.log('Log transport: firebase missing url')
+  } else {
+  	console.log('Log transport: firebase', logFirebase.url)
+  	var Firebase = require('firebase');
+  	var firelogRef = new Firebase(logFirebase.url);
+    if (logFirebase.token) {
+    	firelogRef.auth(logFirebase.token, function(error, result) {
+    	  if (error) {
+    	    console.log("Firebase Authentication Failed!", error);
+    			firelogRef = undefined
+    	  } else {
+    	    console.log("Firebase Authenticated successfully with payload:", result.auth);
+    	    console.log("Firebase Auth expires at:", new Date(result.expires * 1000));
+    	  }
+      })
+    } else if (logFirebase.email && logFirebase.password) {
+      firelogRef.authWithPassword({
+        email:    logFirebase.email,
+        password: logFirebase.password
+      }, function(error, result) {
+    	  if (error) {
+    	    console.log("Firebase Authentication Failed!", error);
+    			firelogRef = undefined
+    	  } else {
+    	    console.log("Firebase Authenticated successfully with payload:", result.auth);
+    	    console.log("Firebase Auth expires at:", new Date(result.expires * 1000));
+    	  }
+      })
+    } else {
+      console.log('Log transport: firebase missing token, email and/or password')
+    }
+	}
 }
 
 var favicon_png   = '';
