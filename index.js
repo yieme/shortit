@@ -258,6 +258,9 @@ String.prototype.replaceIgnoreCase = function(strReplace, strWith) {
 };
 
 if (conPassThru) { // console pass-thru
+  if (conPassThru[0] != '/') conPassThru = '/' + conPassThru
+  if (conPassThru[conPassThru.length-1] == '/') conPassThru += '*'
+  if (conPassThru.indexOf('/*')<0) conPassThru += '/*'
 	console.log('CONSOLE_PASSTHRU:', conPassThru)
 	app.get(conPassThru, function (req, res) {
 		data = req.originalUrl.replaceIgnoreCase(conPassThru, '')
@@ -266,7 +269,7 @@ if (conPassThru) { // console pass-thru
 		if (passThruMaxLen && data.length > passThruMaxLen) {
 			data = data.substr(0, passThruMaxLen)
 		}
-		console.log('data', data);
+		console.log(data);
 		res.send(passThruReturn)
 	});
 }
