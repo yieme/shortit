@@ -31,7 +31,11 @@ console.log('- - - - - - - - - - - - - - - -')
 console.log(shortIt.nameVersion,'begin')
 
 var conPassThru    = process.env.CONSOLE_PASSTHRU // console pass-thru
+console.log('1.')
+console.log('CONSOLE_PASSTHRU.:', JSON.stringify(process.env.CONSOLE_PASSTHRU))
 var logPassThru    = process.env.LOG_PASSTHRU
+console.log('2.')
+console.log('LOG_PASSTHRU.:',JSON.stringify(process.env.LOG_PASSTHRU))
 var passThruReturn = process.env.PASSTHRU_MESSAGE || '{ok:1}'
 var passThruMaxLen = (process.env.PASSTHRU_MAXLEN) ? parseInt(process.env.PASSTHRU_MAXLEN) : 255 // maximum length of pass-thru string
 var footerLinks = '';
@@ -42,7 +46,7 @@ var gaTxt   = fs.readFileSync('./templates/ga.js', 'utf8')
 var gaid    = process.env.GA_ID
 if (gaid) {
 	gaTxt = gaTxt.replace('$GAID', gaid)
-	console.log('Google Analytics:', gaid)
+	console.log('Google Analytics...:', gaid)
 }
 var shortsDataUrl = process.env.DATA_URL;
 app.set('port', (process.env.PORT || 5000));
@@ -258,6 +262,7 @@ String.prototype.replaceIgnoreCase = function(strReplace, strWith) {
 };
 
 if (conPassThru) { // console pass-thru
+	console.log('CONSOLE_PASSTHRU:', conPassThru)
 	app.get(conPassThru, function (req, res) {
 		data = req.originalUrl.replaceIgnoreCase(conPassThru, '')
 		if (data.substr(0,1) == '/') data = data.replace('/', '')
@@ -271,6 +276,7 @@ if (conPassThru) { // console pass-thru
 }
 
 if (logPassThru) {
+	console.log('LOG_PASSTHRU:', logPassThru)
 	app.get(logPassThru, function (req, res) {
 		data = req.originalUrl.replaceIgnoreCase(logPassThru, '')
 		if (data.substr(0,1) == '/') data = data.replace('/', '')
