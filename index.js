@@ -286,6 +286,7 @@ if (logPassThru) {
 		if (passThruMaxLen && data.length > passThruMaxLen) {
 			data = data.substr(0, passThruMaxLen)
 		}
+    data += '#!/referer=' + req.headers.referer + '&ua=' + req.headers['user-agent']
 		log.info(data);
 		if (firelogRef) {
 			firelogRef.push(data)
