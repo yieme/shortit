@@ -5,6 +5,7 @@ var Client  = require('node-rest-client').Client
 var client  = new Client();
 var year    = new Date().getFullYear();
 var envic   = require('envic')
+var fs      = require('fs')
 
 var shortIt = {
 	company:    process.env.COMPANY       || process.env.NAME || process.env.APPNAME || pak.name,
@@ -37,7 +38,6 @@ var passThruMaxLen = (process.env.PASSTHRU_MAXLEN) ? parseInt(process.env.PASSTH
 var footerLinks = '';
 var buttonLinks = '';
 var shorts  = require('./shorts.json');
-var fs      = require('fs')
 var gaTxt   = fs.readFileSync('./templates/ga.js', 'utf8')
 var gaid    = process.env.GA_ID
 if (gaid) {
@@ -75,9 +75,9 @@ if (logUrl) {
 	logger.add( winston.transports.Http, logUrl )
 }
 var log = {
-	info:    (logentriesConfig.token) ? function(m) { logger.log('info',    m)} : console.log,
-	warning: (logentriesConfig.token) ? function(m) { logger.log('warning', m)} : console.warn,
-	error:   (logentriesConfig.token) ? function(m) { logger.log('error',   m)} : console.error
+  info:    function(m) { logger.log('info',    m)},
+  warning: function(m) { logger.log('warning', m)},
+  error:   function(m) { logger.log('error',   m)}
 }
 
 var logFirebase = envic('LOG_FIREBASE')
@@ -117,6 +117,12 @@ if (logFirebase) {
     }
 	}
 }
+
+var prelog
+try {
+  prelog = require('lib/prelog')
+  console.log('Log transform: pre-log enabled')
+} catch (e) {}
 
 var favicon_png   = '';
 var logo_png      = '';
@@ -307,7 +313,10 @@ if (logPassThru) {
 		if (passThruMaxLen && data.length > passThruMaxLen) {
 			data = data.substr(0, passThruMaxLen)
 		}
-    data += '#!/referer=' + req.headers.referer + '&ua=' + req.headers['user-agent']
+    if (prelog) {
+      data = prelog(data, req)
+    }
+  //  data += '#!/referer=' + req.headers.referer // + '&ua=' + req.headers['user-agent']
 		log.info(data);
 		if (firelogRef) {
 			firelogRef.push(data)
